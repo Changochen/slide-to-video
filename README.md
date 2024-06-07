@@ -32,6 +32,10 @@ slide-to-video --model MODEL_NAME --slide slide --script script --output-dir OUT
 ```
 A final video will be generated in the `OUTPUT_PATH` directory as `output.mp4`.
 
+
+https://github.com/Changochen/slide-to-video/assets/18531282/c774367b-e585-4885-b13d-78940934a422
+
+
 For more options, including adjusting speech speed, run:
 ```bash
 slide-to-video --help
