@@ -60,7 +60,7 @@ After generating the video, the output directory will contain a `project.yaml` f
 If you modify the slide, script, or settings (like speech speed), the tool regenerates the affected content. To force regeneration of specific parts, set the `force_reset` field of the corresponding item in `project.yaml` in the output directory.
 
 ### Support a new voice model
-To support a new voice model, you need to implement a new class in `src/slide_to_video/tts_engine` and register the class by calling `x` (See an example at (here)[src/slide_to_video/tts_engine/local.py]).
+To support a new voice model, you need to implement a new class in `src/slide_to_video/tts_engine` and register the class by calling `register_engine` (See an example at [here]([src/slide_to_video/tts_engine/local.py)).
 
 ## Notes
 1. On the first run, you might see the following prompt:
