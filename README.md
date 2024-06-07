@@ -47,6 +47,8 @@ To use a local voice model:
 slide-to-video --model local --slide example/slide.pdf --script example/script.txt --voice example/sample.mp3 --output-dir output
 ```
 
+After a few seconds, you will see a video file `output.mp4` in the `output` directory.
+
 ## Cached Regeneration
 After generating the video, the output directory will contain a `project.yaml` file, which helps skip the generation of unchanged content. If inputs remain the same, the tool skips the video generation process.
 
