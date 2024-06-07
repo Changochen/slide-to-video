@@ -34,6 +34,32 @@ def generate(
         None,
         help='Dictionary to replace the script. Each line should follow the format "original_text: new_text"',
     ),
+    language: Optional[str] = typer.Option(
+        None,
+        case_sensitive=False,
+        click_type=click.Choice(
+            [
+                "en",
+                "es",
+                "fr",
+                "de",
+                "it",
+                "pt",
+                "pl",
+                "tr",
+                "ru",
+                "nl",
+                "cs",
+                "ar",
+                "zh-cn",
+                "hu",
+                "ko",
+                "ja",
+                "hi",
+            ]
+        ),
+        help="Language of the text. Default value: en.",
+    ),
     config: Optional[str] = typer.Option(None, help="Path to yaml config file"),
     ctx: typer.Context = typer.Option(None),
 ):
@@ -51,6 +77,8 @@ def generate(
                 raw_config[key] = 1.0
             elif key == "delay":
                 raw_config[key] = 2.0
+            elif key == "language":
+                raw_config[key] = "en"
 
     project_config = ProjectConfig(raw_config)
     slide_to_video(project_config=project_config)

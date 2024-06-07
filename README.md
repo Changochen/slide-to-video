@@ -1,6 +1,6 @@
 # slide-to-video
 
-A tool that converts a slide deck into a video, complete with your voice narration.
+A tool that converts a slide deck into a video, complete with your voice narration. Support multiple languages.
 
 ## Installation
 Tested on Ubuntu 20.04.
@@ -44,6 +44,9 @@ slide-to-video --help
 **Currently Supported Model**:
 1. [TTS](https://github.com/coqui-ai/TTS)
 2. [play.ht](https://play.ht/)
+
+**Currently Supported Languages**:
+'en', 'es', 'fr', 'de', 'it', 'pt', 'pl', 'tr', 'ru', 'nl', 'cs', 'ar', 'zh-cn', 'hu', 'ko', 'ja', 'hi'
 
 ### Example Usage
 To use a local voice model:

@@ -4,8 +4,9 @@ import concurrent.futures
 
 
 class TTSEngine(ABC):
-    def __init__(self, *, speech_speed=1.0, **kwargs):
+    def __init__(self, *, speech_speed=1.0, language="en", **kwargs):
         self.speed = speech_speed
+        self.language = language
 
     @abstractmethod
     def synthesize(self, text: str, output_path: str, format: str = "wav"):

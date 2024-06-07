@@ -17,7 +17,7 @@ class LocalTTSEngine(TTSEngine):
         self.get_tts().tts_to_file(
             text=text.strip(),
             speaker_wav=self.voice_sample_path,
-            language="en",
+            language=self.language,
             file_path=output_path,
         )
         print(f"Audio file generated and saved as {output_path}")
