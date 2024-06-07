@@ -30,8 +30,13 @@ Tested on Ubuntu 20.04.
 ```bash
 slide-to-video --model MODEL_NAME --slide slide --script script --output-dir OUTPUT_PATH --config ADDITIONAL_CONFIG.yaml
 ```
-A final video will be generated in the `OUTPUT_PATH` directory as `output.mp4`.
 
+### Example Usage
+To use a local voice model:
+```bash
+slide-to-video --model local --slide example/slide.pdf --script example/script.txt --voice example/sample.mp3 --output-dir output
+```
+A final video will be generated in the `OUTPUT_PATH` directory as `output.mp4`.
 
 https://github.com/Changochen/slide-to-video/assets/18531282/c774367b-e585-4885-b13d-78940934a422
 
@@ -47,14 +52,6 @@ slide-to-video --help
 
 **Currently Supported Languages**:
 'en', 'es', 'fr', 'de', 'it', 'pt', 'pl', 'tr', 'ru', 'nl', 'cs', 'ar', 'zh-cn', 'hu', 'ko', 'ja', 'hi'
-
-### Example Usage
-To use a local voice model:
-```bash
-slide-to-video --model local --slide example/slide.pdf --script example/script.txt --voice example/sample.mp3 --output-dir output
-```
-
-After a few seconds, you will see a video file `output.mp4` in the `output` directory.
 
 ## Cached Regeneration
 After generating the video, the output directory will contain a `project.yaml` file, which helps skip the generation of unchanged content. If inputs remain the same, the tool skips the video generation process.
