@@ -1,0 +1,51 @@
+name: Build and Test
+on: [push]
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        model: [local]
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v4
+
+      - name: Install dep
+        run: sudo apt update && sudo apt-get install -y ffmpeg
+
+      - name: Setup Python
+        uses: actions/setup-python@v5.1.0
+        with:
+           python-version: "3.10.14"
+      
+      - name: Cache virtualenv
+        uses: actions/cache@v4
+        with:
+          key: venv-${{ runner.os }}-${{ steps.setup_python.outputs.python-version}}-${{ hashFiles('pyproject.toml') }}
+          path: .venv
+      
+      - name: Cache TTS
+        id: cache-tts
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.local/share/tts
+          key: ${{ runner.os }}-tts
+
+      - name: Cache TTS models.
+        if: steps.cache-tts.outputs.cache-hit != 'true'
+        run: rm -rf /home/runner/.local/share/tts
+      
+      - name: Install dependencies
+        run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install .
+          pip install pyright
+          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+          echo "VIRTUAL_ENV=$VIRTUAL_ENV" >> $GITHUB_ENV
+
+      - name: lint
+        run: pyright src
+
+      - name: e2e
+        run: echo y | slide-to-video --model ${{ matrix.model }} --slide example/slide.pdf --script example/script.txt --voice example/sample.mp3 --output-dir output-${{ matrix.model }}

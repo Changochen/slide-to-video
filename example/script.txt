@@ -1,0 +1,9 @@
+NEWSLIDE
+Hello everyone. Today I will talk about the first slide.
+
+NEWSLIDE
+This is the second slide. I will talk about the second slide.
+The second slide is very important.
+
+===
+#delay: 6

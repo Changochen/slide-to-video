@@ -1,0 +1,24 @@
+# python generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# venv
+.venv
+output/
+*.lock
+output.mp4
+small
+gogo.py
+testplayht.py
+src/slide_to_video/mytest.py
+example/E2_script.docx
+example/E2.pdf
+replace_dict
+test.py
+.env
+config.yaml
+config2.yaml
