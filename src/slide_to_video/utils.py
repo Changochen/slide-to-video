@@ -3,6 +3,7 @@ from typing import List
 import hashlib
 import os
 from pydub import AudioSegment
+from moviepy.editor import VideoFileClip
 
 
 def par_execute(func, *args) -> List[concurrent.futures.Future]:
@@ -35,3 +36,4 @@ def get_audio_duration(audio_file):
     audio = AudioSegment.from_wav(audio_file)
     duration_seconds = len(audio) / 1000.0  # pydub calculates duration in milliseconds
     return duration_seconds
+    

@@ -2,13 +2,14 @@ from __future__ import annotations
 import enum
 from multiprocessing import Manager
 
-from .utils import md5sum_of_file, exists, get_audio_duration
+from .utils import md5sum_of_file, exists, get_audio_duration, get_video_duration
 import yaml
 from .slide_engine import SlideEngine
 from .script_engine import ScriptEngine
 from .tts_engine import TTSEngine, create_engine
 from .video_engine import VideoEngine
 import concurrent.futures
+
 
 
 class TargetVoice:
@@ -103,7 +104,9 @@ class Task(object):
         video_file = f"{self.output_dir}/sub_paragraph_without_sound_{self.id}.mp4"
         audio_file = f"{self.output_dir}/sub_paragraph_{self.id}.wav"
         final_video_file = f"{self.output_dir}/sub_paragraph_{self.id}.mp4"
-
+        #添加字幕
+        subtitle_file = f"{self.output_dir}/sub_paragraph_{self.id}.srt"
+         
         if self.script.cached and self.slide.cached:
             return
 
@@ -127,8 +130,22 @@ class Task(object):
             video_engine.generate_video_from_image(
                 self.slide.path, video_file, duration
             )
-            video_engine.add_audio_to_video(video_file, audio_file, final_video_file)
+            # video_engine.add_audio_to_video(video_file, audio_file, final_video_file)
 
+            # # 生成字幕文件
+            # self.generate_subtitle(self.script.content, subtitle_file, duration, start_delay, end_delay)
+            # # 合成视频、音频和字幕
+            # video_engine.add_audio_and_subtitle_to_video(
+            #     video_file, audio_file, subtitle_file, final_video_file
+            # )
+             # 生成字幕文件
+            script_texts = [self.script.content]  # 将内容转为列表
+            video_engine.generate_subtitle_file(script_texts, [duration], subtitle_file)
+
+            # 合成视频、音频和字幕
+            video_engine.add_audio_and_subtitle_to_video(
+                video_file, audio_file, script_texts, final_video_file
+            )
 
 class ProjectConfig(dict):
     def __init__(self, config):
@@ -328,6 +345,18 @@ class Project:
         cached_script_list = [item.cached for item in self.script_items]
         cached_slide_list = [item.cached for item in self.slide_items]
 
+        # if not all(cached_script_list) or not all(cached_slide_list):
+        #     video_engine = VideoEngine()
+        #     video_paths = [
+        #         f"{self.output_dir}/sub_paragraph_{i+1}.mp4"
+        #         for i in range(len(self.slide_items))
+        #     ]
+        #     final_output = f"{self.output_dir}/output.mp4"
+
+        #     video_engine.concatenate_videos(video_paths, final_output)
+        # else:
+        #     print("All items are cached. No need to build the project.")
+
         if not all(cached_script_list) or not all(cached_slide_list):
             video_engine = VideoEngine()
             video_paths = [
@@ -337,5 +366,15 @@ class Project:
             final_output = f"{self.output_dir}/output.mp4"
 
             video_engine.concatenate_videos(video_paths, final_output)
+
+            # 合并字幕文件
+            subtitle_paths = [
+                f"{self.output_dir}/sub_paragraph_{i+1}.srt"
+                for i in range(len(self.script_items))
+            ]
+
+            # 将字幕嵌入最终视频
+            final_output_with_subtitles = f"{self.output_dir}/output_with_subtitles.mp4"
+            video_engine.embed_subtitle(final_output, subtitle_paths, final_output_with_subtitles)
         else:
             print("All items are cached. No need to build the project.")
