@@ -2,7 +2,7 @@ import os
 import tempfile
 from typing import List
 import ffmpeg
-from .utils import par_execute
+from .utils import par_execute, get_audio_duration
 
 
 def run_ffmpeg_command(command):
@@ -125,3 +125,34 @@ class VideoEngine(object):
             # Clean up the temporary file if it still exists
             if os.path.exists(temp_output_file_name):
                 os.remove(temp_output_file_name)
+
+    def generate_subtitle_file(self, script_texts, durations, subtitle_path):
+        """根据脚本文本生成字幕文件."""
+        with open(subtitle_path, 'w', encoding='utf-8') as f:
+            for i, (text, duration) in enumerate(zip(script_texts, durations)):
+                start_time = sum(durations[:i])
+                end_time = start_time + duration
+                f.write(f"{i + 1}\n")
+                f.write(f"{self.format_time(start_time)} --> {self.format_time(end_time)}\n")
+                f.write(f"{text}\n\n")
+
+    def format_time(self, seconds):
+        hours = int(seconds // 3600)
+        minutes = int((seconds % 3600) // 60)
+        seconds = seconds % 60
+        milliseconds = int((seconds - int(seconds)) * 1000)
+        return f"{hours:02}:{minutes:02}:{int(seconds):02},{milliseconds:03}"
+    
+    def embed_subtitle(self, input_video_path, subtitle_path, output_video_path):
+        input_video = ffmpeg.input(input_video_path)
+        video_with_subtitle = input_video.video.filter('subtitles', subtitle_path)
+        output = ffmpeg.output(
+            video_with_subtitle,
+            input_video.audio,
+            output_video_path,
+            vcodec='libx264',
+            acodec='aac',
+            strict='experimental',
+            pix_fmt='yuv420p'
+        )
+        run_ffmpeg_command(output)
