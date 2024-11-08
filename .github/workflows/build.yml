@@ -46,6 +46,9 @@ jobs:
 
       - name: lint
         run: pyright src
+      
+      - name: unit test
+        run: pytest
 
       - name: e2e
         run: echo y | slide-to-video --model ${{ matrix.model }} --slide example/slide.pdf --script example/script.txt --voice example/sample.mp3 --output-dir output-${{ matrix.model }}

@@ -35,6 +35,7 @@ def extract_text_from_docx(file_path):
 
 class ScriptEngine:
     def load_script(self, script_path) -> str:
+        script_path = str(script_path)
         if script_path.endswith(".docx") or script_path.endswith(".doc"):
             return extract_text_from_docx(script_path)
         else:
